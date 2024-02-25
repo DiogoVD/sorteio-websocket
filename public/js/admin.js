@@ -53,6 +53,9 @@ const messageDiv = document.getElementById("message");
 
 drawButton.addEventListener("click", handleDrawClick);
 
+
+
+// configura função do botao quando clickado
 function handleDrawClick() {
   const confirmationCode = generateCode(4);
 

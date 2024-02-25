@@ -25,15 +25,18 @@ server.listen(APP_PORT, () =>
 
 let clients = [];
 
+// Adiciona a clientes todos que acessarem o site para p sorteio
 wss.on("connection", (ws) => {
   clients.push(ws);
   updateAdminClientCount();
 
+// Trata o fechamento da conexao
   ws.on("close", () => {
     clients = clients.filter((client) => client !== ws);
     updateAdminClientCount();
   });
 
+// Quando ativa a conexão pode realizar o envio de mensagens
   ws.on("message", handleIncomingMessage.bind(null, ws));
 });
 
@@ -53,6 +56,7 @@ function handleIncomingMessage(ws, msg) {
   }
 }
 
+// Realiza o filtro e faz o sorteio pelo Random
 function handleDraw(confirmationCode) {
   let participants = Array.from(wss.clients).filter(
     (client) => !client.isAdmin
@@ -73,6 +77,7 @@ function updateAdminClientCount() {
     (client) => !client.isAdmin
   ).length;
 
+// Trata a abertura da conexão com o server
   Array.from(wss.clients).forEach((client) => {
     if (client.isAdmin && client.readyState === WebSocket.OPEN) {
       client.send(
